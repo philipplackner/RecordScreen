@@ -88,6 +88,7 @@ class ScreenRecordService: Service() {
         when(intent?.action) {
             START_RECORDING -> {
                 val notification = NotificationHelper.createNotification(applicationContext)
+                NotificationHelper.createNotificationChannel(applicationContext)
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     startForeground(
                         1,
@@ -137,6 +138,7 @@ class ScreenRecordService: Service() {
 
     private fun stopRecording() {
         mediaRecorder.stop()
+        mediaProjection?.stop()
         mediaRecorder.reset()
     }
 
@@ -212,7 +214,6 @@ class ScreenRecordService: Service() {
         mediaRecorder.release()
         virtualDisplay?.release()
         mediaProjection?.unregisterCallback(mediaProjectionCallback)
-        mediaProjection?.stop()
         mediaProjection = null
     }
 
